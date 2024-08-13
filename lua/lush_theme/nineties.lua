@@ -45,14 +45,16 @@
 local lush = require("lush")
 local hsl = lush.hsl
 
--- local black = hsl(0, 0, 10)
+local pure_black = hsl(0, 0, 10)
 local black = hsl("#1b2b34").darken(10)
+local pure_white = hsl(0, 0, 100)
 local cursor = hsl(0, 0, 80)
 local white = hsl(0, 0, 95)
 local string = hsl(0, 0, 60)
 local green = hsl(133, 94, 39)
 local red = hsl(10, 72, 39)
 local yellow = hsl(80, 90, 89)
+local hard_yellow = hsl(59, 100, 62)
 
 -- LSP/Linters mistakenly show `undefined global` errors in the spec, they may
 -- support an annotation like the following. Consult your server documentation.
@@ -72,9 +74,9 @@ local theme = lush(function(injected_functions)
 		--
 		ColorColumn({}), -- Columns set with 'colorcolumn'
 		-- Conceal        { }, -- Placeholder characters substituted for concealed text (see 'conceallevel')
-		Cursor({ fg = cursor, bg = black }), -- Character under the cursor
-		CurSearch({ bg = yellow }), -- Highlighting a search pattern under the cursor (see 'hlsearch')
-		-- lCursor        { }, -- Character under the cursor when |language-mapping| is used (see 'guicursor')
+		-- Cursor({}), -- Character under the cursor
+		CurSearch({ bg = hard_yellow, fg = pure_black, gui = "bold" }), -- Highlighting a search pattern under the cursor (see 'hlsearch')
+		-- lCursor        ({bg=hard_yellow }), -- Character under the cursor when |language-mapping| is used (see 'guicursor')
 		-- CursorIM       { }, -- Like Cursor, but used when in IME mode |CursorIM|
 		-- CursorColumn   { }, -- Screen-column at the cursor, when 'cursorcolumn' is set.
 		CursorLine({ bg = black.li(15) }), -- Screen-line at the cursor, when 'cursorline' is set. Low-priority if foreground (ctermfg OR guifg) is not set.
@@ -93,13 +95,13 @@ local theme = lush(function(injected_functions)
 		SignColumn({ bg = Normal.bg, fg = Normal.fg }), -- Column where |signs| are displayed
 		-- IncSearch      { }, -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
 		-- Substitute     { }, -- |:substitute| replacement text highlighting
-		LineNr({ fg = Normal.fg, bg = Normal.bg }), -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
-		-- LineNrAbove    { }, -- Line number for when the 'relativenumber' option is set, above the cursor line
-		-- LineNrBelow    { }, -- Line number for when the 'relativenumber' option is set, below the cursor line
+		LineNr({ gui = "bold", fg = hard_yellow }), -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
+		LineNrAbove({ gui = "normal" }), -- Line number for when the 'relativenumber' option is set, above the cursor line
+		LineNrBelow({ gui = "normal" }), -- Line number for when the 'relativenumber' option is set, below the cursor line
 		CursorLineNr({ fg = Normal.fg, bg = Normal.bg, gui = "bold" }), -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
 		-- CursorLineFold { }, -- Like FoldColumn when 'cursorline' is set for the cursor line
 		-- CursorLineSign { }, -- Like SignColumn when 'cursorline' is set for the cursor line
-		MatchParen({ fg = black, bg = white }), -- Character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
+		MatchParen({ fg = black, bg = green }), -- Character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
 		-- ModeMsg        { }, -- 'showmode' message (e.g., "-- INSERT -- ")
 		-- MsgArea        { }, -- Area for messages and cmdline
 		-- MsgSeparator   { }, -- Separator for scrolled messages, `msgsep` flag of 'display'
@@ -118,9 +120,9 @@ local theme = lush(function(injected_functions)
 		-- PmenuExtraSel  { }, -- Popup menu: Selected item "extra text"
 		-- PmenuSbar      { }, -- Popup menu: Scrollbar.
 		-- PmenuThumb     { }, -- Popup menu: Thumb of the scrollbar.
-		-- Question       { }, -- |hit-enter| prompt and yes/no questions
-		-- QuickFixLine   { }, -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
-		-- Search         { }, -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
+		Question       { }, -- |hit-enter| prompt and yes/no questions
+		QuickFixLine({}), -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
+		Search({ bg = yellow, fg = pure_black }), -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
 		SpecialKey({}), -- Unprintable characters: text displayed differently from what it really is. But not 'listchars' whitespace. |hl-Whitespace|
 		-- SpellBad       { }, -- Word that is not recognized by the spellchecker. |spell| Combined with the highlighting used otherwise.
 		-- SpellCap       { }, -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
@@ -137,7 +139,7 @@ local theme = lush(function(injected_functions)
 		-- WarningMsg     { }, -- Warning messages
 		-- Whitespace     { }, -- "nbsp", "space", "tab" and "trail" in 'listchars'
 		-- Winseparator   { }, -- Separator between window splits. Inherts from |hl-VertSplit| by default, which it will replace eventually.
-		-- WildMenu       { }, -- Current match in 'wildmenu' completion
+		WildMenu({}), -- Current match in 'wildmenu' completion
 		-- WinBar         { }, -- Window bar of current window
 		-- WinBarNC       { }, -- Window bar of not-current windows
 
@@ -152,7 +154,7 @@ local theme = lush(function(injected_functions)
 		Comment({ fg = string }), -- Any comment
 
 		Constant({}), -- (*) Any constant
-		String({ bg = Normal.bg, fg = string }), --   A string constant: "this is a string"
+		String({ fg = string }), --   A string constant: "this is a string"
 		-- Character      { }, --   A character constant: 'c', '\n'
 		Number({ fg = Normal.fg, bg = Normal.bg }), --   A number constant: 234, 0xff
 		-- Boolean        { }, --   A boolean constant: TRUE, false
@@ -300,6 +302,7 @@ local theme = lush(function(injected_functions)
 		gitDiff({ fg = white.darken(50) }),
 		diffRemoved({ fg = red }),
 		diffAdded({ fg = green }),
+		luaParenError({}),
 	}
 end)
 
