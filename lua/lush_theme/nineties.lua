@@ -120,7 +120,7 @@ local theme = lush(function(injected_functions)
 		-- PmenuExtraSel  { }, -- Popup menu: Selected item "extra text"
 		-- PmenuSbar      { }, -- Popup menu: Scrollbar.
 		-- PmenuThumb     { }, -- Popup menu: Thumb of the scrollbar.
-		Question       { }, -- |hit-enter| prompt and yes/no questions
+		Question({}), -- |hit-enter| prompt and yes/no questions
 		QuickFixLine({}), -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
 		Search({ bg = yellow, fg = pure_black }), -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
 		SpecialKey({}), -- Unprintable characters: text displayed differently from what it really is. But not 'listchars' whitespace. |hl-Whitespace|
@@ -296,7 +296,7 @@ local theme = lush(function(injected_functions)
 		sym("@include")({}), -- Include
 		sym("@preproc")({}), -- PreProc
 		sym("@debug")({}), -- Debug
-		sym("@tag")({}), -- Tag
+		sym("@tag")({ gui = "bold" }), -- Tag
 
 		-- Fugitive
 		gitDiff({ fg = white.darken(50) }),
